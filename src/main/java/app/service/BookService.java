@@ -1,14 +1,15 @@
 package app.service;
 
-import app.model.Book;
+import app.dto.BookDto;
+import app.dto.CreatBookRequestDto;
 import java.util.List;
 
 public interface BookService {
-    Book addBook(Book book);
+    BookDto addBook(CreatBookRequestDto creatBookRequestDto);
 
-    Book getBook(int id);
+    BookDto findById(Long id);
 
-    List<Book> getAllBooks();
+    List<BookDto> getAllBooks();
 
-    boolean deleteBook(int id);
+    boolean deleteBook(Long id);
 }

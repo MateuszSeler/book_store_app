@@ -1,24 +1,21 @@
 package app.repository;
 
 import app.exception.DataProcessingException;
+import app.exception.EntityNotFoundException;
 import app.model.Book;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
 
-    private SessionFactory sessionFactory;
-
-    @Autowired
-    public BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final SessionFactory sessionFactory;
 
     @Override
     public Book save(Book book) {
@@ -43,7 +40,7 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Optional<Book> get(int id) {
+    public Optional<Book> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(Book.class, id));
         } catch (Exception e) {
@@ -61,15 +58,15 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(Long id) {
         Session session = null;
         Transaction transaction = null;
 
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.delete(get(id)
-                    .orElseThrow(() -> new RuntimeException("no object with id: " + id)));
+            session.delete(findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("no object with id: " + id)));
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -82,6 +79,6 @@ public class BookRepositoryImpl implements BookRepository {
                 session.close();
             }
         }
-        return get(id).isEmpty();
+        return findById(id).isEmpty();
     }
 }
