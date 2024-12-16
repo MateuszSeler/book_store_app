@@ -1,8 +1,8 @@
 package app.repository;
 
-import app.dto.BookSearchParameter;
+import app.dto.BookSearchParameterDto;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface SpecificationBuilder<T> {
-    public Specification<T> build(BookSearchParameter bookSearchParameter);
+    public Specification<T> build(BookSearchParameterDto bookSearchParameterDto);
 }

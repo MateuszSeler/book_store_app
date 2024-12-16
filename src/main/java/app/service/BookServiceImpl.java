@@ -1,7 +1,7 @@
 package app.service;
 
 import app.dto.BookDto;
-import app.dto.BookSearchParameter;
+import app.dto.BookSearchParameterDto;
 import app.dto.CreatBookRequestDto;
 import app.exception.EntityNotFoundException;
 import app.mapper.BookMapper;
@@ -57,7 +57,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParameter parameters) {
+    public List<BookDto> search(BookSearchParameterDto parameters) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(parameters);
         return bookRepository.findAll(bookSpecification)
                 .stream()
