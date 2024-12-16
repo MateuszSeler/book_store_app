@@ -1,6 +1,6 @@
 package app.repository.book;
 
-import app.dto.BookSearchParameterDto;
+import app.dto.BookSearchParametersDto;
 import app.model.Book;
 import app.repository.SpecificationBuilder;
 import app.repository.SpecificationProviderManager;
@@ -14,7 +14,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
-    public Specification<Book> build(BookSearchParameterDto searchParameter) {
+    public Specification<Book> build(BookSearchParametersDto searchParameter) {
         Specification<Book> specification = Specification.where(null);
 
         if (searchParameter.author() != null
