@@ -1,6 +1,6 @@
 package app.dto;
 
-public record BookSearchParameter(
+public record BookSearchParameterDto(
         String[] author,
         String[] description,
         String[] isbn,

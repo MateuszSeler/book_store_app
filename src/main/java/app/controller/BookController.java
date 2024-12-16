@@ -1,10 +1,11 @@
 package app.controller;
 
 import app.dto.BookDto;
-import app.dto.BookSearchParameter;
+import app.dto.BookSearchParameterDto;
 import app.dto.CreatBookRequestDto;
 import app.service.BookService;
 import java.util.List;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,17 +35,17 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public List<BookDto> search(BookSearchParameter parameter) {
+    public List<BookDto> search(BookSearchParameterDto parameter) {
         return bookService.search(parameter);
     }
 
     @PostMapping
-    public BookDto add(@RequestBody CreatBookRequestDto creatBookRequestDto) {
+    public BookDto add(@RequestBody @Valid CreatBookRequestDto creatBookRequestDto) {
         return bookService.addBook(creatBookRequestDto);
     }
 
     @PutMapping("/{id}")
-    public void put(@PathVariable Long id, @RequestBody CreatBookRequestDto creatBookRequestDto) {
+    public void put(@PathVariable @Valid Long id, @RequestBody CreatBookRequestDto creatBookRequestDto) {
         bookService.update(id, creatBookRequestDto);
     }
 
