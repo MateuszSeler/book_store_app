@@ -1,20 +1,21 @@
 package app.service;
 
 import app.dto.BookDto;
-import app.dto.BookSearchParameterDto;
-import app.dto.CreatBookRequestDto;
+import app.dto.BookSearchParametersDto;
+import app.dto.CreateBookRequestDto;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
-    BookDto addBook(CreatBookRequestDto createBookRequestDto);
+    BookDto addBook(CreateBookRequestDto createBookRequestDto);
 
     BookDto findById(Long id);
 
-    List<BookDto> getAllBooks();
+    List<BookDto> getAllBooks(Pageable pageable);
 
     void deleteById(Long id);
 
-    void update(Long id, CreatBookRequestDto creatBookRequestDto);
+    void update(Long id, CreateBookRequestDto createBookRequestDto);
 
-    List<BookDto> search(BookSearchParameterDto searchParameter);
+    List<BookDto> search(BookSearchParametersDto searchParameter, Pageable pageable);
 }

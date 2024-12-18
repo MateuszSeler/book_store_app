@@ -1,8 +1,8 @@
 package app.service;
 
 import app.dto.BookDto;
-import app.dto.BookSearchParameterDto;
-import app.dto.CreatBookRequestDto;
+import app.dto.BookSearchParametersDto;
+import app.dto.CreateBookRequestDto;
 import app.exception.EntityNotFoundException;
 import app.mapper.BookMapper;
 import app.model.Book;
@@ -11,6 +11,7 @@ import app.repository.book.BookSpecificationBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ public class BookServiceImpl implements BookService {
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
-    public BookDto addBook(CreatBookRequestDto creatBookRequestDto) {
-        Book book = bookMapper.toModel(creatBookRequestDto);
+    public BookDto addBook(CreateBookRequestDto createBookRequestDto) {
+        Book book = bookMapper.toModel(createBookRequestDto);
         Book savedBook = bookRepository.save(book);
         return bookMapper.toDto(savedBook);
     }
@@ -37,8 +38,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAllBooks() {
-        return bookRepository.findAll()
+    public List<BookDto> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable)
                 .stream()
                 .map(bookMapper::toDto)
                 .collect(Collectors.toList());
@@ -50,16 +51,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void update(Long id, CreatBookRequestDto creatBookRequestDto) {
-        Book book = bookMapper.toModel(creatBookRequestDto);
+    public void update(Long id, CreateBookRequestDto createBookRequestDto) {
+        Book book = bookMapper.toModel(createBookRequestDto);
         book.setId(id);
         bookRepository.save(book);
     }
 
     @Override
-    public List<BookDto> search(BookSearchParameterDto parameters) {
+    public List<BookDto> search(BookSearchParametersDto parameters, Pageable pageable) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(parameters);
-        return bookRepository.findAll(bookSpecification)
+        return bookRepository.findAll(bookSpecification, pageable)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
