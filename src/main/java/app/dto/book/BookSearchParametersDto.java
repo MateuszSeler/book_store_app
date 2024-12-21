@@ -1,4 +1,4 @@
-package app.dto;
+package app.dto.book;
 
 public record BookSearchParametersDto(
         String[] author,
