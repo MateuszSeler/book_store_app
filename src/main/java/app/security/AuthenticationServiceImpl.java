@@ -1,6 +1,7 @@
 package app.security;
 
 import app.dto.user.UserLoginRequestDto;
+import app.exception.AuthenticationException;
 import app.model.User;
 import app.repository.user.UserRepository;
 import java.util.Optional;
@@ -14,11 +15,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public boolean authenticate(UserLoginRequestDto userLoginRequestDto) {
-        Optional<User> user = userRepository.findByEmail(userLoginRequestDto.getEmail());
-        if (user.isPresent() && user.get().getPassword()
-                .equals(userLoginRequestDto.getPassword())) {
-            return true;
+        Optional<User> optionalUserByEmail =
+                userRepository.findByEmail(userLoginRequestDto.getEmail());
+
+        if (optionalUserByEmail.isEmpty()) {
+            throw new AuthenticationException("no user with email:"
+                    + userLoginRequestDto.getEmail());
         }
-        return false;
+        return true;
     }
 }

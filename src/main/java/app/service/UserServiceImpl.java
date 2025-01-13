@@ -4,8 +4,10 @@ import app.dto.user.UserRegistrationRequestDto;
 import app.dto.user.UserResponseDto;
 import app.exception.RegistrationException;
 import app.mapper.UserMapper;
+import app.model.User;
 import app.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto) {
@@ -23,7 +26,10 @@ public class UserServiceImpl implements UserService {
                 .equals(userRegistrationRequestDto.getPassword())) {
             throw new RegistrationException("Passwords do not match");
         }
-        return userMapper.toDto(userRepository.save(
-                userMapper.toModel(userRegistrationRequestDto)));
+
+        User user = userMapper.toModel(userRegistrationRequestDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userMapper.toDto(userRepository.save(user));
     }
 }
