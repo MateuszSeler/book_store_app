@@ -11,14 +11,13 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Data
 @SQLDelete(sql = "UPDATE books SET is_Deleted = true WHERE id = ?")
 @SQLRestriction(value = "is_Deleted = false")
 @Table(name = "roles")
-public class Role implements GrantedAuthority {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,10 +29,5 @@ public class Role implements GrantedAuthority {
     enum RoleName {
         ROLE_ADMIN,
         ROLE_USER;
-    }
-
-    @Override
-    public String getAuthority() {
-        return roleType.toString();
     }
 }
