@@ -28,8 +28,8 @@ public class Role implements GrantedAuthority {
     private boolean isDeleted = false;
 
     enum RoleName {
-        ROLE_ADMIN,
-        ROLE_USER;
+        ADMIN,
+        USER;
     }
 
     @Override
