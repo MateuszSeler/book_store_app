@@ -15,6 +15,9 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: role_type
-                  type: ENUM ('ROLE_ADMIN', 'ROLE_USER')
+                  type: ENUM ('ADMIN', 'USER')
                   constraints:
                     nullable: false
+              - column:
+                  name: is_deleted
+                  type: bit

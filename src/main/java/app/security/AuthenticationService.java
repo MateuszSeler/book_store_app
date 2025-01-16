@@ -1,7 +1,8 @@
 package app.security;
 
 import app.dto.user.UserLoginRequestDto;
+import app.dto.user.UserLoginResponseDto;
 
 public interface AuthenticationService {
-    boolean authenticate(UserLoginRequestDto userLoginRequestDto);
+    UserLoginResponseDto authenticate(UserLoginRequestDto userLoginRequestDto);
 }

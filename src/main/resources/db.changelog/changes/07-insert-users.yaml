@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: {name: email, value: "jan@gmail.com"}
-              - column: {name: password, value: "$2a$10$843kmxpFAjA1lmeaD6PeMennP.YPSyrC53HOM.imJdWBw3.872H7C"}
+              - column: {name: password, value: "$2a$10$TVPKgP9EZZstDAmcxzrhnukVlvnolcVGMfZMlzh1ilSLtx6X3MbRu"}
               - column: {name: first_name, value: "Jan"}
               - column: {name: last_name, value: "Nowak"}
               - column: {name: shipping_address, value: "Adres Jana"}
@@ -17,7 +17,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: {name: email, value: "tomasz@gmail.com"}
-              - column: {name: password, value: "$2a$10$tHWoMIj7SIdt.jhtPKAKJO1zRT0WHSsMSHGrRjaNmex7uyBxB6vau"}
+              - column: {name: password, value: "$2a$10$HSEwSm7eE0EQxiZDGltSYeDU5VmUMYYwbOPjCUJ2XGj4J1LUET.0C"}
               - column: {name: first_name, value: "Tomasz"}
               - column: {name: last_name, value: "Kowalski"}
               - column: {name: shipping_address, value: "Adres Tomasza"}
