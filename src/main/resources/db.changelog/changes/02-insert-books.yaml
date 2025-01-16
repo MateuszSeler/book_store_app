@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-books
+      author: mseler
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Lalka"}
+              - column: {name: author, value: "Boleslaw Prus"}
+              - column: {name: isbn, value: "9781858660653"}
+              - column: {name: price, value: "55"}
+              - column: {name: description, value: "Lalka"}
+              - column: {name: cover_image, value: "lalkacover.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Dziady"}
+              - column: {name: author, value: "Adam Mickiewicz"}
+              - column: {name: isbn, value: "9781911414001"}
+              - column: {name: price, value: "35"}
+              - column: {name: description, value: "Dziady"}
+              - column: {name: cover_image, value: "dziadycover.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Wesele"}
+              - column: {name: author, value: "Stanisław Wyspiański"}
+              - column: {name: isbn, value: "9788308026120"}
+              - column: {name: price, value: "89"}
+              - column: {name: description, value: "Wesele"}
+              - column: {name: cover_image, value: "weselecover.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Solaris"}
+              - column: {name: author, value: "Stanisław Lem"}
+              - column: {name: isbn, value: "9788838929106"}
+              - column: {name: price, value: "77"}
+              - column: {name: description, value: "Solaris"}
+              - column: {name: cover_image, value: "solariscover.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Krzyżacy"}
+              - column: {name: author, value: "Henryk Sienkiewicz"}
+              - column: {name: isbn, value: "9783846003275"}
+              - column: {name: price, value: "44"}
+              - column: {name: description, value: "Krzyżacy"}
+              - column: {name: cover_image, value: "krzyzacycover.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Nie-Boska komedia"}
+              - column: {name: author, value: "Zygmunt Krasiński"}
+              - column: {name: isbn, value: "9788437625706"}
+              - column: {name: price, value: "22"}
+              - column: {name: description, value: "Nie-Boska komedia"}
+              - column: {name: cover_image, value: "nieboskacover.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}

@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users-table
+      author: mseler
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "jan@gmail.com"}
+              - column: {name: password, value: "$2a$10$843kmxpFAjA1lmeaD6PeMennP.YPSyrC53HOM.imJdWBw3.872H7C"}
+              - column: {name: first_name, value: "Jan"}
+              - column: {name: last_name, value: "Nowak"}
+              - column: {name: shipping_address, value: "Adres Jana"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "tomasz@gmail.com"}
+              - column: {name: password, value: "$2a$10$tHWoMIj7SIdt.jhtPKAKJO1zRT0WHSsMSHGrRjaNmex7uyBxB6vau"}
+              - column: {name: first_name, value: "Tomasz"}
+              - column: {name: last_name, value: "Kowalski"}
+              - column: {name: shipping_address, value: "Adres Tomasza"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "piotr@gmail.com"}
+              - column: {name: password, value: "$2a$10$bHUPuNHbuvggx5j1x128x.s9LP/WLzyuCiwduvNIuzMbq6JlmJVzS"}
+              - column: {name: first_name, value: "Piotr"}
+              - column: {name: last_name, value: "Piotr"}
+              - column: {name: shipping_address, value: "Adres Piotra"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "admin@gmail.com"}
+              - column: {name: password, value: "$2a$10$Cs7N7gAsaIK1vehPzapxpeo6g6yk1lutyqwhyWhs0VpqpxiclUqDu"}
+              - column: {name: first_name, value: "Admin"}
+              - column: {name: last_name, value: "Admin"}
+              - column: {name: shipping_address, value: "Adres Admina"}
+              - column: {name: is_deleted, valueBoolean: "false"}

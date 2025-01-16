@@ -45,8 +45,15 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return objectError.getDefaultMessage();
     }
 
-    @ExceptionHandler({RuntimeException.class})
+    @ExceptionHandler({RegistrationException.class})
     public ResponseEntity<Object> handleRegistrationException(RegistrationException exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(exception.getMessage());
