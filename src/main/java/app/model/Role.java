@@ -1,5 +1,6 @@
 package app.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,6 +24,8 @@ public class Role implements GrantedAuthority {
     private Long id;
     @Enumerated(EnumType.STRING)
     private RoleName roleType;
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 
     enum RoleName {
         ROLE_ADMIN,
