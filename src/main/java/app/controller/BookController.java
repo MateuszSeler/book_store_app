@@ -1,8 +1,9 @@
 package app.controller;
 
+import app.dto.book.BookCreateRequestDto;
 import app.dto.book.BookDto;
+import app.dto.book.BookDtoWithoutCategoriesIds;
 import app.dto.book.BookSearchParametersDto;
-import app.dto.book.CreateBookRequestDto;
 import app.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,31 +23,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "book manger", description = "Endpoints for manging books in book shop app")
+@Tag(name = "books manger", description = "Endpoints for manging books in book shop app")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     @Operation(summary = "finding by id",
             description = "finding book by id")
-    public BookDto findById(@PathVariable Long id) {
+    public BookDtoWithoutCategoriesIds findById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     @Operation(summary = "getting all",
             description = "getting all books")
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookDtoWithoutCategoriesIds> getAll(Pageable pageable) {
         return bookService.getAllBooks(pageable);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/bycategoryid/{categoryId}")
+    @Operation(summary = "getting all by category",
+            description = "getting all books by category id")
+    public List<BookDtoWithoutCategoriesIds> findAllByCategoryId(
+            @PathVariable Long categoryId, Pageable pageable) {
+        return bookService.findAllByCategoryId(categoryId, pageable);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/search")
     @Operation(summary = "searching by parameters",
             description = "getting books based on parameters")
-    public List<BookDto> search(BookSearchParametersDto parameter, Pageable pageable) {
+    public List<BookDtoWithoutCategoriesIds> search(
+            BookSearchParametersDto parameter, Pageable pageable) {
         return bookService.search(parameter, pageable);
     }
 
@@ -54,16 +68,16 @@ public class BookController {
     @PostMapping
     @Operation(summary = "creating",
             description = "creating new book")
-    public BookDto add(@RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
-        return bookService.addBook(createBookRequestDto);
+    public BookDto add(@RequestBody @Valid BookCreateRequestDto bookCreateRequestDto) {
+        return bookService.addBook(bookCreateRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "updating", description = "updating book by id")
     public void put(@PathVariable @Valid Long id,
-                    @RequestBody CreateBookRequestDto createBookRequestDto) {
-        bookService.update(id, createBookRequestDto);
+                    @RequestBody BookCreateRequestDto bookCreateRequestDto) {
+        bookService.update(id, bookCreateRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
