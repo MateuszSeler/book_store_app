@@ -5,5 +5,6 @@ public record BookSearchParametersDto(
         String[] description,
         String[] isbn,
         String[] title,
-        String[] price) {
+        String[] price,
+        String[] category) {
 }
