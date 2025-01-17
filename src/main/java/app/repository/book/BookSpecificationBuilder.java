@@ -52,6 +52,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
                             .getSpecificationProvider("title")
                             .getSpecification(searchParameter.title()));
         }
+
         return specification;
     }
 }
