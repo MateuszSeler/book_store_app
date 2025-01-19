@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.dto.user.UserLoginRequestDto;
+import app.dto.user.UserLoginResponseDto;
 import app.dto.user.UserRegistrationRequestDto;
 import app.dto.user.UserResponseDto;
 import app.security.AuthenticationService;
@@ -29,7 +30,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("login")
-    public boolean login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        authenticationService.authenticate(userLoginRequestDto);
         return authenticationService.authenticate(userLoginRequestDto);
     }
 }
