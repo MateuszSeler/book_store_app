@@ -33,6 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     userLoginRequestDto.getEmail(),
                     userLoginRequestDto.getPassword()));
+
         String token = jwtUtil.generateToken(authenticate.getName(), authenticate.getAuthorities());
 
         return new UserLoginResponseDto(token);

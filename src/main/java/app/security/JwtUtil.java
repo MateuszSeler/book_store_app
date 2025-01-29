@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    //@Value("${jwt.expiration}")
     private Long expiration = 60000000L;
     private final Key secret;
 
@@ -24,12 +23,14 @@ public class JwtUtil {
         secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
     }
 
+
     public String generateToken(String userName, Collection<? extends GrantedAuthority> authorities) {
         return Jwts.builder()
                 .setSubject(userName)
                 .claim("roles", authorities.stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList()))
+
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(secret)
