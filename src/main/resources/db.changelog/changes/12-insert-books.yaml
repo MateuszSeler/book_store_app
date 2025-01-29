@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-books
+      author: mseler
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "We Do Not Part"}
+              - column: {name: author, value: "Han Kang"}
+              - column: {name: isbn, value: "9780241600269"}
+              - column: {name: price, value: "85"}
+              - column: {name: description, value: "We Do Not Part"}
+              - column: {name: cover_image, value: "wedonotpart.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Jon Fosse"}
+              - column: {name: author, value: "Morning & Evening"}
+              - column: {name: isbn, value: "9783404184002"}
+              - column: {name: price, value: "89"}
+              - column: {name: description, value: "Morning and Evening"}
+              - column: {name: cover_image, value: "morningevening.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "The Years"}
+              - column: {name: author, value: "Annie Ernaux"}
+              - column: {name: isbn, value: "9781804270523"}
+              - column: {name: price, value: "61"}
+              - column: {name: description, value: "The Years"}
+              - column: {name: cover_image, value: "years.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Paradise"}
+              - column: {name: author, value: "Abdulrazak Gurnah"}
+              - column: {name: isbn, value: "9780241001837"}
+              - column: {name: price, value: "74"}
+              - column: {name: description, value: "Paradise"}
+              - column: {name: cover_image, value: "paradise.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "Poems 1962-2020"}
+              - column: {name: author, value: "Louise Glück"}
+              - column: {name: isbn, value: "9780241526071"}
+              - column: {name: price, value: "32"}
+              - column: {name: description, value: "Poems by Louise Glück"}
+              - column: {name: cover_image, value: "louisglückpoems.ai"}
+              - column: {name: is_deleted, valueBoolean: "false"}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "The Buried Giant" }
+              - column: { name: author, value: "Kazuo Ishiguro" }
+              - column: { name: isbn, value: "9781101911310" }
+              - column: { name: price, value: "44" }
+              - column: { name: description, value: "Buried Giant" }
+              - column: { name: cover_image, value: "buriedgiant.ai" }
+              - column: { name: is_deleted, valueBoolean: "false" }
+
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Koniec i początek" }
+              - column: { name: author, value: "Wisława Szymborska" }
+              - column: { name: isbn, value: "9788385568032"}
+              - column: { name: price, value: "24" }
+              - column: { name: description, value: "Koniec i początek" }
+              - column: { name: cover_image, value: "koniecpoczątek.ai" }
+              - column: { name: is_deleted, valueBoolean: "false" }

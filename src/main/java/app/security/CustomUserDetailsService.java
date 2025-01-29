@@ -1,5 +1,6 @@
 package app.security;
 
+import app.model.User;
 import app.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,12 +11,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "Cannot find user with email: " + email));
+        System.out.println("Loaded user: " + user);
+        System.out.println("Loaded user authorities: " + user.getAuthorities());
+        return user;
     }
 }

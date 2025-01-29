@@ -35,7 +35,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authentication -> authentication
-                                .requestMatchers("/authentication/**", "/error")
+                                .requestMatchers("/authentication/**",
+                                        "/books/**",
+                                        "/categories/**",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/webjars/**",
+                                         "/error")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
