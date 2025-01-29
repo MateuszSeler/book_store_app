@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto addBook(BookCreateRequestDto bookCreateRequestDto) {
-        Book book = bookMapper.toModel(bookCreateRequestDto);
+        Book book = bookMapper.toModel(bookCreateRequestDto, categoryRepository);
         for (Category category : book.getCategories()) {
             Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
             if (optionalCategory.isPresent()) {
@@ -87,7 +87,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void update(Long id, BookCreateRequestDto bookCreateRequestDto) {
-        Book book = bookMapper.toModel(bookCreateRequestDto);
+        Book book = bookMapper.toModel(bookCreateRequestDto, categoryRepository);
         book.setId(id);
         bookRepository.save(book);
     }
