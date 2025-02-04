@@ -1,6 +1,6 @@
-package app.dto.shopping.cart;
+package app.dto.shoppingcart;
 
-import app.dto.item.cart.ItemCartDto;
+import app.dto.itemcart.ItemCartDto;
 import java.util.Set;
 import lombok.Data;
 

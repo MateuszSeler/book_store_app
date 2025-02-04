@@ -1,7 +1,8 @@
-package app.repository.item.cart;
+package app.repository.itemcart;
 
 import app.model.ItemCart;
 import java.util.Optional;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,5 +17,6 @@ public interface ItemCartRepository extends JpaRepository<ItemCart, Long> {
             + "left join fetch cart.book.categories "
             + "WHERE cart.book.id = :bookId "
             + "AND cart.shoppingCart.id = :shoppingCartId")
-    Optional<ItemCart> findByBookIdAndShoppingCartId(Long bookId, Long shoppingCartId);
+    Optional<ItemCart> findByBookIdAndShoppingCartId(
+            @NonNull Long bookId, @NonNull Long shoppingCartId);
 }

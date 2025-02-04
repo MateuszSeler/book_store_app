@@ -1,7 +1,8 @@
-package app.repository.shopping.cart;
+package app.repository.shoppingcart;
 
 import app.model.ShoppingCart;
 import java.util.Optional;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,5 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
             + "left join fetch cart.user "
             + "left join fetch cart.user.roles "
             + "WHERE cart.id = :id")
-    Optional<ShoppingCart> findById(Long id);
+    Optional<ShoppingCart> findById(@NonNull Long id);
 }

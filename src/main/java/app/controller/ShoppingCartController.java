@@ -1,7 +1,7 @@
 package app.controller;
 
-import app.dto.item.cart.ItemCartCreateRequestDto;
-import app.dto.shopping.cart.ShoppingCartDto;
+import app.dto.itemcart.ItemCartCreateRequestDto;
+import app.dto.shoppingcart.ShoppingCartDto;
 import app.service.ShoppingCartService;
 import app.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

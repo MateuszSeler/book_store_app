@@ -1,7 +1,7 @@
 package app.service;
 
-import app.dto.item.cart.ItemCartCreateRequestDto;
-import app.dto.shopping.cart.ShoppingCartDto;
+import app.dto.itemcart.ItemCartCreateRequestDto;
+import app.dto.shoppingcart.ShoppingCartDto;
 import app.exception.EntityNotFoundException;
 import app.mapper.ShoppingCartMapper;
 import app.model.Book;
@@ -9,8 +9,8 @@ import app.model.ItemCart;
 import app.model.ShoppingCart;
 import app.model.User;
 import app.repository.book.BookRepository;
-import app.repository.item.cart.ItemCartRepository;
-import app.repository.shopping.cart.ShoppingCartRepository;
+import app.repository.itemcart.ItemCartRepository;
+import app.repository.shoppingcart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 () -> new EntityNotFoundException("ShoppingCart with id: "
                         + userId + " not found"));
 
-        ItemCart itemCart = findByBookIdAndShoppingCartId(bookId, userId).orElseThrow(
+        ItemCart itemCart = findItemCartByBookIdAndShoppingCartId(bookId, userId).orElseThrow(
                 () -> new EntityNotFoundException("ItemCart with bookId: "
                         + bookId + " for user with id: " + userId + " not found"));
 
@@ -77,6 +77,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         itemCartRepository.delete(itemCart);
 
         return shoppingCartMapper.toDto(shoppingCartRepository.save(shoppingCart));
+    }
+
+    @Override
+    public void delete(ShoppingCart shoppingCart) {
+        for (ItemCart itemCart : shoppingCart.getItemCarts()) {
+            itemCartRepository.delete(itemCart);
+        }
+
+        shoppingCartRepository.delete(shoppingCart);
     }
 
     @Transactional(readOnly = true)
@@ -87,7 +96,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Transactional(readOnly = true)
-    Optional<ItemCart> findByBookIdAndShoppingCartId(Long bookId, Long shoppingCartId) {
+    Optional<ItemCart> findItemCartByBookIdAndShoppingCartId(Long bookId, Long shoppingCartId) {
         return itemCartRepository.findByBookIdAndShoppingCartId(bookId, shoppingCartId);
     }
 
@@ -95,7 +104,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ItemCart getOrCreateItemCart(
             ItemCartCreateRequestDto itemCartCreateRequestDto, ShoppingCart shoppingCart) {
         Optional<ItemCart> optionalItemCart =
-                findByBookIdAndShoppingCartId(
+                findItemCartByBookIdAndShoppingCartId(
                         itemCartCreateRequestDto.getBookId(), shoppingCart.getId());
 
         if (optionalItemCart.isPresent()) {

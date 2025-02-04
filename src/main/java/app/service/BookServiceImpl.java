@@ -31,17 +31,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto addBook(BookCreateRequestDto bookCreateRequestDto) {
         Book book = bookMapper.toModel(bookCreateRequestDto, categoryRepository);
+
         for (Category category : book.getCategories()) {
             Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
-            if (optionalCategory.isPresent()) {
-                category = optionalCategory.get();
-            } else {
+            if (optionalCategory.isEmpty()) {
                 throw new EntityNotFoundException(
                         "Category with id: " + category.getId() + " not found");
             }
         }
-        Book savedBook = bookRepository.save(book);
-        return bookMapper.toDto(savedBook);
+
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override

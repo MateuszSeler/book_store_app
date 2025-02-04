@@ -1,4 +1,4 @@
-package app.dto.item.cart;
+package app.dto.itemcart;
 
 import app.dto.book.BookDto;
 import lombok.Data;

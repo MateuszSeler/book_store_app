@@ -1,7 +1,7 @@
 package app.mapper;
 
 import app.config.MapperConfig;
-import app.dto.shopping.cart.ShoppingCartDto;
+import app.dto.shoppingcart.ShoppingCartDto;
 import app.model.ShoppingCart;
 import app.repository.user.UserRepository;
 import org.mapstruct.Context;
