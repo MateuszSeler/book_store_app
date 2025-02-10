@@ -1,8 +1,8 @@
 package app.mapper;
 
 import app.config.MapperConfig;
-import app.dto.itemcart.ItemCartDto;
-import app.model.ItemCart;
+import app.dto.cartitem.CartItemDto;
+import app.model.CartItem;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,31 +11,31 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class, uses = {BookMapper.class})
-public interface ItemCartMapper {
+public interface CartItemMapper {
     @Mapping(source = "book", target = "bookDto",
             qualifiedByName = "fromBookToBookDto")
-    ItemCartDto toDto(ItemCart itemCart);
+    CartItemDto toDto(CartItem cartItem);
 
-    ItemCart toModel(ItemCartDto itemCartDto);
+    CartItem toModel(CartItemDto cartItemDto);
 
-    @Named("fromItemCartDtosToItemCarts")
-    default Set<ItemCart> itemCartSet(
-            Set<ItemCartDto> itemCartsDtos) {
-        if (itemCartsDtos == null || itemCartsDtos.isEmpty()) {
+    @Named("fromCartItemDtosToCartItems")
+    default Set<CartItem> cartItemsSet(
+            Set<CartItemDto> cartItemsDtos) {
+        if (cartItemsDtos == null || cartItemsDtos.isEmpty()) {
             return new HashSet<>();
         }
-        return itemCartsDtos
+        return cartItemsDtos
                 .stream()
                 .map(this::toModel)
                 .collect(Collectors.toSet());
     }
 
-    @Named("fromItemCartsToItemCartDtos")
-    default Set<ItemCartDto> itemCartDtosSet(Set<ItemCart> itemCarts) {
-        if (itemCarts == null || itemCarts.isEmpty()) {
+    @Named("fromCartItemsToCartItemDtos")
+    default Set<CartItemDto> cartItemDtosSet(Set<CartItem> cartItems) {
+        if (cartItems == null || cartItems.isEmpty()) {
             return new HashSet<>();
         }
-        return itemCarts
+        return cartItems
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toSet());

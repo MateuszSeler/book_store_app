@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import lombok.ToString;
 @Entity
 @Data
 @Table(name = "item_carts")
-public class ItemCart {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,5 +33,6 @@ public class ItemCart {
     @JoinColumn(name = "book_id")
     private Book book;
     @NotNull
+    @Min(1)
     private int quantity;
 }

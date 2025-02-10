@@ -7,9 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "categories")
 public class Category {
     @Id
@@ -18,4 +20,7 @@ public class Category {
     @Column(nullable = false)
     private String name;
     private String description;
+
+    public Category(Long id) {
+    }
 }

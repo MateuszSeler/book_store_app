@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrderService {
     OrderDto save(Order order);
 
-    OrderDto placeOrder(Long userId);
+    OrderDto creatingOrderBasedOnUsersShoppingCart(Long userId);
 
     List<OrderDto> getOrderHistory(Long userId);
 
@@ -17,4 +17,6 @@ public interface OrderService {
     OrderItemDto getItemDetailsFromTheOrder(Long orderItemId, Long userId);
 
     OrderDto updateOrderStatus(Long orderId, String orderStatus);
+
+    Order toEntity(OrderDto orderDto);
 }

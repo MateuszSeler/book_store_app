@@ -1,7 +1,9 @@
 package app.service;
 
 import app.dto.category.CategoryDto;
+import app.model.Category;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
@@ -15,4 +17,5 @@ public interface CategoryService {
 
     void deleteById(Long id);
 
+    Set<Category> getCategoriesFromCategoriesIds(Set<Long> categoriesIds);
 }

@@ -1,5 +1,6 @@
 package app.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -26,8 +27,9 @@ public class ShoppingCart {
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shoppingCart")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shoppingCart",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<ItemCart> itemCarts = new HashSet<>();
+    private Set<CartItem> cartItems = new HashSet<>();
 }

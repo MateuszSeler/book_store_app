@@ -33,15 +33,15 @@ public class OrderController {
             description = "placing new order")
     public OrderDto placeOrder() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return orderService.placeOrder(
+        return orderService.creatingOrderBasedOnUsersShoppingCart(
                 userService.findByEmail(authentication.getName()).getId());
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
-    @Operation(summary = "getting order history",
-            description = "getting order history")
-    public List<OrderDto> getOrderHistory() {
+    @Operation(summary = "getting orders history",
+            description = "getting orders history")
+    public List<OrderDto> getOrdersHistory() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return orderService.getOrderHistory(
                 userService.findByEmail(authentication.getName()).getId());
@@ -59,8 +59,8 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items/{orderItemId}")
-    @Operation(summary = "getting order history",
-            description = "getting order history")
+    @Operation(summary = "getting item details",
+            description = "getting item details from the order")
     public OrderItemDto getItemDetailsFromTheOrder(
             @PathVariable Long orderId, @PathVariable Long orderItemId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,5 +75,30 @@ public class OrderController {
     public OrderDto updateOrderStatus(
             @PathVariable Long orderId, @PathVariable String orderStatus) {
         return orderService.updateOrderStatus(orderId, orderStatus);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/byuser/{userId}")
+    @Operation(summary = "getting user's order history",
+            description = "getting user's order history")
+    public List<OrderDto> getUsersOrdersHistory(@PathVariable Long userId) {
+        return orderService.getOrderHistory(userId);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/byuser/{userId}/{orderId}")
+    @Operation(summary = "getting user's order",
+            description = "getting user's details about order by orderId")
+    public OrderDto getUsersOrderDetails(@PathVariable Long userId, @PathVariable Long orderId) {
+        return orderService.getOrderDetails(orderId, userId);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/byuser/{userId}/{orderId}/items/{orderItemId}")
+    @Operation(summary = "getting user's item details",
+            description = "getting user's item details from the order by orderId and orderItemId")
+    public OrderItemDto getUsersItemDetailsFromTheOrder(
+            @PathVariable Long userId, @PathVariable Long orderId, @PathVariable Long orderItemId) {
+        return orderService.getItemDetailsFromTheOrder(orderItemId, userId);
     }
 }
