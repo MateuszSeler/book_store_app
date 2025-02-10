@@ -7,18 +7,18 @@ import app.dto.book.BookSearchParametersDto;
 import app.exception.EntityNotFoundException;
 import app.mapper.BookMapper;
 import app.model.Book;
-import app.model.Category;
 import app.repository.book.BookRepository;
 import app.repository.book.BookSpecificationBuilder;
-import app.repository.category.CategoryRepository;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,25 +26,18 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Override
-    public BookDto addBook(BookCreateRequestDto bookCreateRequestDto) {
-        Book book = bookMapper.toModel(bookCreateRequestDto, categoryRepository);
-
-        for (Category category : book.getCategories()) {
-            Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
-            if (optionalCategory.isEmpty()) {
-                throw new EntityNotFoundException(
-                        "Category with id: " + category.getId() + " not found");
-            }
-        }
-
-        return bookMapper.toDto(bookRepository.save(book));
+    @Transactional
+    public BookDto addBook(@Valid BookCreateRequestDto bookCreateRequestDto) {
+        return bookMapper.toDto(
+                bookRepository.save(toEntity(bookCreateRequestDto)));
     }
 
     @Override
-    public BookDtoWithoutCategoriesIds findById(Long id) {
+    @Transactional(readOnly = true)
+    public BookDtoWithoutCategoriesIds findById(@NonNull Long id) {
         return bookMapper.toDtoWithoutCategoriesIds(
                 bookRepository.findById(id).orElseThrow(
                         () -> new EntityNotFoundException("Book with id: " + id + " not found")
@@ -52,6 +45,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookDtoWithoutCategoriesIds> search(
             BookSearchParametersDto parameters, Pageable pageable) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(parameters);
@@ -62,8 +56,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookDtoWithoutCategoriesIds> findAllByCategoryId(
-            Long categoryId, Pageable pageable) {
+            @NonNull Long categoryId, Pageable pageable) {
         List<BookDtoWithoutCategoriesIds> booksDtoList = new ArrayList<>();
         for (Book book : bookRepository.findAllByCategoryId(categoryId)) {
             booksDtoList.add(bookMapper.toDtoWithoutCategoriesIds(book));
@@ -72,6 +67,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookDtoWithoutCategoriesIds> getAllBooks(Pageable pageable) {
         return bookRepository.findAll(pageable)
                 .stream()
@@ -80,14 +76,30 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    @Transactional
+    public void deleteById(@NonNull Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Book with id: " + id + " not found");
+        }
         bookRepository.deleteById(id);
     }
 
     @Override
-    public void update(Long id, BookCreateRequestDto bookCreateRequestDto) {
-        Book book = bookMapper.toModel(bookCreateRequestDto, categoryRepository);
+    @Transactional
+    public void update(@NonNull Long id, @Valid BookCreateRequestDto bookCreateRequestDto) {
+        Book book = toEntity(bookCreateRequestDto);;
         book.setId(id);
         bookRepository.save(book);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Book toEntity(BookCreateRequestDto bookCreateRequestDto) {
+        Book book = bookMapper.toModel(bookCreateRequestDto);
+        book.setCategories(
+                categoryService.getCategoriesFromCategoriesIds(
+                        bookCreateRequestDto.getCategoriesIds()));
+
+        return book;
     }
 }

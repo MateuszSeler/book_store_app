@@ -1,18 +1,20 @@
 package app.service;
 
-import app.dto.itemcart.ItemCartCreateRequestDto;
+import app.dto.cartitem.CartItemCreateRequestDto;
 import app.dto.shoppingcart.ShoppingCartDto;
 import app.model.ShoppingCart;
 
 public interface ShoppingCartService {
-    ShoppingCartDto getOrCreateShoppingCart(Long id);
+    ShoppingCartDto get(Long id);
 
     ShoppingCartDto save(ShoppingCart shoppingCart);
 
     ShoppingCartDto addOrUpdateItemCart(
-            ItemCartCreateRequestDto itemCartCreateRequestDto, Long userId);
+            CartItemCreateRequestDto cartItemCreateRequestDto, Long userId);
 
     ShoppingCartDto deleteItemCartByBookId(Long bookId, Long userId);
+
+    ShoppingCart toEntity(ShoppingCartDto shoppingCartDto);
 
     void delete(ShoppingCart shoppingCart);
 }

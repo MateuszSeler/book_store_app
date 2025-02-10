@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import lombok.Data;
@@ -35,5 +36,6 @@ public class OrderItem {
     @NotNull
     private int quantity;
     @NotNull
+    @DecimalMin("0.00")
     private BigDecimal price;
 }

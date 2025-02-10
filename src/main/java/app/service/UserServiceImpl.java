@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto) {
         if (userRepository.findByEmail(userRegistrationRequestDto.getEmail()).isPresent()) {
             throw new RegistrationException("User already exists");

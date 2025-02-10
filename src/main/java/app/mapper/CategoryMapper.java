@@ -2,13 +2,10 @@ package app.mapper;
 
 import app.config.MapperConfig;
 import app.dto.category.CategoryDto;
-import app.exception.EntityNotFoundException;
 import app.model.Category;
-import app.repository.category.CategoryRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
@@ -18,17 +15,14 @@ public interface CategoryMapper {
 
     Category toModel(CategoryDto categoryDto);
 
-    @Named("fromCategoriesIdsToCategories")
-    default Set<Category> categoriesSet(Set<Long> categoriesIds,
-                                        @Context CategoryRepository categoryRepository) {
-        if (categoriesIds == null || categoriesIds.isEmpty()) {
+    @Named("fromCategoriesToCategoriesNames")
+    default Set<String> categoriesNamesSet(Set<Category> categories) {
+        if (categories == null || categories.isEmpty()) {
             return new HashSet<>();
         }
-        return categoriesIds
+        return categories
                 .stream()
-                .map(id -> categoryRepository.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException(
-                        "Category with id: " + id + " not found")))
+                .map(Category::getName)
                 .collect(Collectors.toSet());
     }
 

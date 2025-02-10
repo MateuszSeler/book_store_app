@@ -1,5 +1,6 @@
 package app.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,7 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,12 +36,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @NotNull
-    @Min(0)
+    @DecimalMin("0.00")
     private BigDecimal total;
     @NotNull
     private LocalDateTime orderDate;
     private String shippingAddress;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;
@@ -50,5 +52,4 @@ public class Order {
         IN_PROCESS,
         COMPLETED;
     }
-
 }

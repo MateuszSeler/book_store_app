@@ -17,7 +17,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             + "left join fetch order.user "
             + "left join fetch order.user.roles "
             + "WHERE order.id = :id")
-    Optional<Order> findById(@NonNull Long id);
+    Optional<Order> findById(
+            @NonNull Long id);
 
     @Query("FROM Order order "
             + "JOIN FETCH order.orderItems orderItem "
@@ -26,7 +27,17 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             + "JOIN FETCH order.user user "
             + "JOIN FETCH user.roles role "
             + "WHERE user.id = :userId")
-    List<Order> getOrdersByUserId(@NonNull Long userId);
+    List<Order> getOrdersByUserIdWithAllData(
+            @NonNull Long userId);
+
+    @Query("FROM Order order "
+            + "JOIN FETCH order.orderItems orderItem "
+            + "JOIN FETCH orderItem.book book "
+            + "JOIN FETCH book.categories category "
+            + "JOIN order.user user "
+            + "WHERE user.id = :userId")
+    List<Order> getOrdersByUserIdLimitingUserDataToId(
+            @NonNull Long userId);
 
     @Query("FROM Order order "
             + "left join fetch order.orderItems "
@@ -36,5 +47,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             + "left join fetch order.user.roles "
             + "WHERE order.user.id = :userId "
             + "AND order.id = :orderId")
-    Optional<Order> getOrderByIdAndUserId(@NonNull Long orderId, @NonNull Long userId);
+    Optional<Order> getOrderByIdAndUserIdWithAllData(
+            @NonNull Long orderId, @NonNull Long userId);
+
+    @Query("FROM Order order "
+            + "JOIN FETCH order.orderItems orderItem "
+            + "JOIN FETCH orderItem.book book "
+            + "JOIN FETCH book.categories category "
+            + "JOIN order.user user "
+            + "WHERE order.user.id = :userId "
+            + "AND order.id = :orderId")
+    Optional<Order> getOrderByIdAndUserIdLimitingUserDataToId(
+            @NonNull Long orderId, @NonNull Long userId);
 }

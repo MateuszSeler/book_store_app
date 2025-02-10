@@ -1,14 +1,14 @@
-package app.dto.itemcart;
+package app.dto.cartitem;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class ItemCartCreateRequestDto {
+public class CartItemCreateRequestDto {
     @NotNull
-    @NotEmpty
+    @Positive
     private Long bookId;
     @Min(1)
     private int quantity;

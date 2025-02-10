@@ -1,6 +1,6 @@
 package app.controller;
 
-import app.dto.itemcart.ItemCartCreateRequestDto;
+import app.dto.cartitem.CartItemCreateRequestDto;
 import app.dto.shoppingcart.ShoppingCartDto;
 import app.service.ShoppingCartService;
 import app.service.UserService;
@@ -33,7 +33,7 @@ public class ShoppingCartController {
             description = "getting shopping cart")
     public ShoppingCartDto get() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return shoppingCartService.getOrCreateShoppingCart(
+        return shoppingCartService.get(
                 userService.findByEmail(authentication.getName()).getId());
     }
 
@@ -42,10 +42,10 @@ public class ShoppingCartController {
     @Operation(summary = "adding book",
             description = "adding book by creating new item cart"
                     + "and attaching it to shopping cart connected to the user")
-    public ShoppingCartDto add(@RequestBody ItemCartCreateRequestDto itemCartCreateRequestDto) {
+    public ShoppingCartDto add(@RequestBody CartItemCreateRequestDto cartItemCreateRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return shoppingCartService.addOrUpdateItemCart(
-                itemCartCreateRequestDto,
+                cartItemCreateRequestDto,
                 userService.findByEmail(authentication.getName()).getId());
     }
 

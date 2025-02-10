@@ -1,6 +1,6 @@
-package app.repository.itemcart;
+package app.repository.cartitem;
 
-import app.model.ItemCart;
+import app.model.CartItem;
 import java.util.Optional;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ItemCartRepository extends JpaRepository<ItemCart, Long> {
-    @Query("FROM ItemCart cart "
+public interface CartItemRepository extends JpaRepository<CartItem, Long> {
+    @Query("FROM CartItem cart "
             + "left join fetch cart.shoppingCart "
             + "left join fetch cart.shoppingCart.user "
             + "left join fetch cart.shoppingCart.user.roles "
@@ -17,6 +17,6 @@ public interface ItemCartRepository extends JpaRepository<ItemCart, Long> {
             + "left join fetch cart.book.categories "
             + "WHERE cart.book.id = :bookId "
             + "AND cart.shoppingCart.id = :shoppingCartId")
-    Optional<ItemCart> findByBookIdAndShoppingCartId(
+    Optional<CartItem> findByBookIdAndShoppingCartId(
             @NonNull Long bookId, @NonNull Long shoppingCartId);
 }

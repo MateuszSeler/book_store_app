@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class Book {
     private String author;
     @Column(unique = true)
     private String isbn;
+    @DecimalMin("0.00")
     private BigDecimal price;
     private String description;
     private String coverImage;

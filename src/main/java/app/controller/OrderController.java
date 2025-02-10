@@ -33,7 +33,7 @@ public class OrderController {
             description = "placing new order")
     public OrderDto placeOrder() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return orderService.placeOrder(
+        return orderService.creatingOrderBasedOnUsersShoppingCart(
                 userService.findByEmail(authentication.getName()).getId());
     }
 

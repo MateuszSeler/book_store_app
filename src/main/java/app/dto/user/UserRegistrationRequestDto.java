@@ -1,7 +1,7 @@
 package app.dto.user;
 
 import app.validator.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,9 +13,9 @@ public class UserRegistrationRequestDto {
     private String password;
     @Length(min = 6, max = 20)
     private String repeatPassword;
-    @NotEmpty
+    @NotBlank
     private String firstName;
-    @NotEmpty
+    @NotBlank
     private String lastName;
     private String shippingAddress;
 }
