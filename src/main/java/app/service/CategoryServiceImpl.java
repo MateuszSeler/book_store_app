@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto save(CategoryDto categoryDto) {
         return categoryMapper.toDto(
                 categoryRepository.save(
-                        categoryMapper.toModel(categoryDto)));
+                        categoryMapper.toEntity(categoryDto)));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new EntityNotFoundException("Category with id: " + id + " not found");
         }
 
-        Category categoryForUpdate = categoryMapper.toModel(categoryDto);
+        Category categoryForUpdate = categoryMapper.toEntity(categoryDto);
         categoryForUpdate.setId(id);
         return categoryMapper.toDto(categoryRepository.save(categoryForUpdate));
     }
