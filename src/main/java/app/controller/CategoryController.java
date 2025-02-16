@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.dto.book.BookDtoWithoutCategoriesIds;
+import app.dto.category.CategoryCreateRequestDto;
 import app.dto.category.CategoryDto;
 import app.service.BookService;
 import app.service.CategoryService;
@@ -11,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,16 +62,19 @@ public class CategoryController {
     @PostMapping
     @Operation(summary = "creating",
             description = "creating new category")
-    public CategoryDto create(@RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public ResponseEntity<CategoryDto> create(
+            @RequestBody @Valid CategoryCreateRequestDto categoryCreateRequestDto) {
+        CategoryDto categorySaved = categoryService.save(categoryCreateRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categorySaved);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "updating", description = "updating category by id")
     public CategoryDto update(@PathVariable @Valid Long id,
-                                      @RequestBody CategoryDto categoryDto) {
-        return categoryService.update(id, categoryDto);
+                                      @RequestBody CategoryCreateRequestDto
+                                              categoryCreateRequestDto) {
+        return categoryService.update(id, categoryCreateRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
