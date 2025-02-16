@@ -58,4 +58,11 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity<Object> handleAuthenticationException(EntityNotFoundException exception) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
 }

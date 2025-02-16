@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +16,7 @@ import lombok.ToString;
 
 @Entity
 @Data
-@Table(name = "item_carts")
+@Table(name = "cart_items")
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,7 @@ public class CartItem {
     @EqualsAndHashCode.Exclude
     private ShoppingCart shoppingCart;
     @NotNull
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
     @NotNull

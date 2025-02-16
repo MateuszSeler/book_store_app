@@ -16,7 +16,7 @@ public interface BookRepository extends
 
     @Query("FROM Book book "
             + "left join fetch book.categories "
-            + " WHERE book.id = :id")
+            + "WHERE book.id = :id")
     Optional<Book> findById(@NonNull Long id);
 
     @Query("FROM Book book "

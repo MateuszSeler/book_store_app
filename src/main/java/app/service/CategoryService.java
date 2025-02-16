@@ -1,5 +1,6 @@
 package app.service;
 
+import app.dto.category.CategoryCreateRequestDto;
 import app.dto.category.CategoryDto;
 import app.model.Category;
 import java.util.List;
@@ -11,9 +12,9 @@ public interface CategoryService {
 
     CategoryDto getById(Long id);
 
-    CategoryDto save(CategoryDto categoryDto);
+    CategoryDto save(CategoryCreateRequestDto categoryCreateRequestDto);
 
-    CategoryDto update(Long id, CategoryDto categoryDto);
+    CategoryDto update(Long id, CategoryCreateRequestDto categoryCreateRequestDto);
 
     void deleteById(Long id);
 

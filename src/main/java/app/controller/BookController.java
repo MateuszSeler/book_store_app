@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,7 @@ public class BookController {
     @Operation(summary = "finding by id",
             description = "finding book by id")
     public BookDtoWithoutCategoriesIds findById(@PathVariable Long id) {
-        return bookService.findById(id);
+        return bookService.getById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -59,16 +60,18 @@ public class BookController {
     @PostMapping
     @Operation(summary = "creating",
             description = "creating new book")
-    public BookDto add(@RequestBody @Valid BookCreateRequestDto bookCreateRequestDto) {
-        return bookService.addBook(bookCreateRequestDto);
+    public ResponseEntity<BookDto> add(
+            @RequestBody @Valid BookCreateRequestDto bookCreateRequestDto) {
+        BookDto savedbookDto = bookService.addBook(bookCreateRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedbookDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "updating", description = "updating book by id")
-    public void put(@PathVariable @Valid Long id,
+    public BookDto update(@PathVariable @Valid Long id,
                     @RequestBody BookCreateRequestDto bookCreateRequestDto) {
-        bookService.update(id, bookCreateRequestDto);
+        return bookService.update(id, bookCreateRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
