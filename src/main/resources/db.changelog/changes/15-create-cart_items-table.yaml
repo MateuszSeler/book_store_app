@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-item_carts-table
+      id: create-cart_items-table
       author: mseler
       changes:
         - createTable:
-            tableName: item_carts
+            tableName: cart_items
             columns:
               - column:
                   name: id

@@ -22,5 +22,4 @@ public interface UserMapper {
                 () -> new EntityNotFoundException("User with id: " + userId + " not found")
         );
     }
-
 }

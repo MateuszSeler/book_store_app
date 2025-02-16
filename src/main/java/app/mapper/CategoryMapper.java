@@ -1,6 +1,7 @@
 package app.mapper;
 
 import app.config.MapperConfig;
+import app.dto.category.CategoryCreateRequestDto;
 import app.dto.category.CategoryDto;
 import app.model.Category;
 import java.util.HashSet;
@@ -14,6 +15,8 @@ public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
     Category toModel(CategoryDto categoryDto);
+
+    Category toModel(CategoryCreateRequestDto categoryCreateRequestDto);
 
     @Named("fromCategoriesToCategoriesNames")
     default Set<String> categoriesNamesSet(Set<Category> categories) {

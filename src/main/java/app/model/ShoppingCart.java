@@ -27,8 +27,7 @@ public class ShoppingCart {
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shoppingCart",
-            cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
