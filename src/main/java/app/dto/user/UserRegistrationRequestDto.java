@@ -3,9 +3,11 @@ package app.dto.user;
 import app.validator.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 @Data
+@Accessors(chain = true)
 public class UserRegistrationRequestDto {
     @Email
     private String email;

@@ -36,7 +36,7 @@ public class BookController {
     @Operation(summary = "finding by id",
             description = "finding book by id")
     public BookDtoWithoutCategoriesIds findById(@PathVariable Long id) {
-        return bookService.findById(id);
+        return bookService.getById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -69,7 +69,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "updating", description = "updating book by id")
-    public BookDto put(@PathVariable @Valid Long id,
+    public BookDto update(@PathVariable @Valid Long id,
                     @RequestBody BookCreateRequestDto bookCreateRequestDto) {
         return bookService.update(id, bookCreateRequestDto);
     }

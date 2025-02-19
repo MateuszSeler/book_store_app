@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 public interface BookService {
     BookDto addBook(BookCreateRequestDto bookCreateRequestDto);
 
-    BookDtoWithoutCategoriesIds findById(Long id);
+    BookDtoWithoutCategoriesIds getById(Long id);
 
     List<BookDtoWithoutCategoriesIds> getAllBooks(Pageable pageable);
 

@@ -51,17 +51,11 @@ class BookControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findById_byExistingId_success() throws Exception {
-        BookDto expected = new BookDto()
-                .setId(1L)
-                .setTitle("Dziady")
-                .setAuthor("Adam Mickiewicz")
-                .setIsbn("9781911414001")
-                .setPrice(BigDecimal.valueOf(35))
-                .setDescription("Dziady")
-                .setCoverImage("dziadycover.ai");
+        Long bookId = 1L;
+        BookDto expected = getDziadyDto();
 
         MvcResult mvcResult = mockMvc.perform(
-                        get("/books/1")
+                        get("/books/" + bookId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -171,16 +165,6 @@ class BookControllerTest {
     void search_byTitle_gettingDziady() throws Exception {
         String title = "Dziady";
 
-        BookDto expectedBook = new BookDto()
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
-
-        List<BookDto> expected = List.of(expectedBook);
-
         MvcResult mvcResult = mockMvc.perform(
                         get("/books/search")
                                 .param("title", title)
@@ -204,13 +188,7 @@ class BookControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createProduct_validRequestDto_success() throws Exception {
-        BookCreateRequestDto bookCreateRequestDto = new BookCreateRequestDto()
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
+        BookCreateRequestDto bookCreateRequestDto = getLalkaCreateRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(bookCreateRequestDto);
 
@@ -225,13 +203,7 @@ class BookControllerTest {
         BookDto actual = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(), BookDto.class);
 
-        BookDto expected = new BookDto()
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
+        BookDto expected = getLalkaDto();
 
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.getId());
@@ -245,23 +217,8 @@ class BookControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_validRequestDto_success() throws Exception {
-
-        BookCreateRequestDto bookCreateRequestDto = new BookCreateRequestDto()
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
-
-        BookDto expected = new BookDto()
-                .setId(1L)
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
+        BookCreateRequestDto bookCreateRequestDto = getLalkaCreateRequestDto();
+        BookDto expected = getLalkaDto();
 
         String jsonRequest = objectMapper.writeValueAsString(bookCreateRequestDto);
 
@@ -288,12 +245,44 @@ class BookControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void delete_byExistingId_success() throws Exception {
-
+        Long bookId = 1L;
         MvcResult mvcResult = mockMvc.perform(
-                       MockMvcRequestBuilders.delete("/books/1")
+                       MockMvcRequestBuilders.delete("/books/" + bookId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andReturn();
+    }
+
+    private BookDto getDziadyDto() {
+        return new BookDto()
+                .setId(1L)
+                .setTitle("Dziady")
+                .setAuthor("Adam Mickiewicz")
+                .setIsbn("9781911414001")
+                .setPrice(BigDecimal.valueOf(35))
+                .setDescription("Dziady")
+                .setCoverImage("dziadycover.ai");
+    }
+
+    private BookDto getLalkaDto() {
+        return new BookDto()
+                .setId(1L)
+                .setTitle("Lalka")
+                .setAuthor("Boleslaw Prus")
+                .setIsbn("9781858660653")
+                .setPrice(BigDecimal.valueOf(55))
+                .setDescription("Lalka")
+                .setCoverImage("lalkacover.ai");
+    }
+
+    private BookCreateRequestDto getLalkaCreateRequestDto() {
+        return new BookCreateRequestDto()
+                .setTitle("Lalka")
+                .setAuthor("Boleslaw Prus")
+                .setIsbn("9781858660653")
+                .setPrice(BigDecimal.valueOf(55))
+                .setDescription("Lalka")
+                .setCoverImage("lalkacover.ai");
     }
 }

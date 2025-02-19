@@ -1,11 +1,13 @@
 package app.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import app.dto.book.BookCreateRequestDto;
 import app.exception.EntityNotFoundException;
 import app.repository.book.BookRepository;
 import java.math.BigDecimal;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,14 +24,17 @@ class BookServiceImplTest {
     private BookServiceImpl bookServiceImpl;
 
     @Test
-    void findById_nonExistingBook_EntityNotFound() {
+    void getById_nonExistingBook_EntityNotFound() {
         Long bookId = 31L;
 
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            bookServiceImpl.findById(bookId);
-        });
+        EntityNotFoundException exception =
+                assertThrows(EntityNotFoundException.class,
+                        () -> bookServiceImpl.getById(bookId));
+
+        assertEquals("Book with id: " + bookId + " not found", exception.getMessage());
+
     }
 
     @Test
@@ -38,9 +43,10 @@ class BookServiceImplTest {
 
         Mockito.when(bookRepository.existsById(bookId)).thenReturn(false);
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            bookServiceImpl.deleteById(bookId);
-        });
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                bookServiceImpl.deleteById(bookId));
+
+        assertEquals("Book with id: " + bookId + " not found", exception.getMessage());
     }
 
     @Test
@@ -56,8 +62,9 @@ class BookServiceImplTest {
 
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            bookServiceImpl.update(bookId, bookCreateRequestDto);
-        });
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> bookServiceImpl.update(bookId, bookCreateRequestDto));
+
+        assertEquals("Book with id: " + bookId + " not found", exception.getMessage());
     }
 }

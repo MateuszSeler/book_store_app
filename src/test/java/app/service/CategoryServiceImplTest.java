@@ -1,10 +1,12 @@
 package app.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import app.dto.category.CategoryCreateRequestDto;
 import app.exception.EntityNotFoundException;
 import app.repository.category.CategoryRepository;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,13 +29,11 @@ class CategoryServiceImplTest {
         Mockito.when(categoryRepository
                 .findById(categoryId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            categoryService.getById(categoryId);
-        });
-    }
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                categoryService.getById(categoryId));
 
-    @Test
-    void save() {
+        assertEquals("Category with id: " + categoryId
+                + " not found", exception.getMessage());
     }
 
     @Test
@@ -46,9 +46,11 @@ class CategoryServiceImplTest {
         Mockito.when(categoryRepository
                 .findById(categoryId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            categoryService.update(categoryId, categoryCreateRequestDto);
-        });
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> categoryService.update(categoryId, categoryCreateRequestDto));
+
+        assertEquals("Category with id: " + categoryId
+                + " not found", exception.getMessage());
     }
 
     @Test
@@ -58,9 +60,10 @@ class CategoryServiceImplTest {
         Mockito.when(categoryRepository
                 .findById(categoryId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            categoryService.deleteById(categoryId);
-        });
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                categoryService.deleteById(categoryId));
 
+        assertEquals("Category with id: " + categoryId
+                + " not found", exception.getMessage());
     }
 }

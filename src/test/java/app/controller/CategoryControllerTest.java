@@ -51,12 +51,11 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getById_byExistingId_success() throws Exception {
-        CategoryDto expected = new CategoryDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
+        Long categoryId = 1L;
+        CategoryDto expected = getPolishLiteratureDto();
 
         MvcResult mvcResult = mockMvc.perform(
-                        get("/categories/1")
+                        get("/categories/" + categoryId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -108,8 +107,9 @@ class CategoryControllerTest {
             "classpath:sqlqueries/clear-books_categories.sql"},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByCategoryId_byExistingId_gettingLalka() throws Exception {
+        Long categoryId = 1L;
         MvcResult mvcResult = mockMvc.perform(
-                        get("/categories/bycategoryid/1")
+                        get("/categories/bycategoryid/" + categoryId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -130,9 +130,7 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void create_validRequestDto_success() throws Exception {
-        CategoryCreateRequestDto categoryCreateRequestDto = new CategoryCreateRequestDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
+        CategoryCreateRequestDto categoryCreateRequestDto = getPolishLiteratureCreateRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(categoryCreateRequestDto);
 
@@ -147,9 +145,7 @@ class CategoryControllerTest {
         CategoryDto actual = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(), CategoryDto.class);
 
-        CategoryDto expected = new CategoryDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
+        CategoryDto expected = getPolishLiteratureDto();
 
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.getId());
@@ -163,18 +159,14 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_validRequestDto_success() throws Exception {
-        CategoryCreateRequestDto categoryCreateRequestDto = new CategoryCreateRequestDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
-
-        CategoryDto expected = new CategoryDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
+        Long categoryId = 2L;
+        CategoryCreateRequestDto categoryCreateRequestDto = getPolishLiteratureCreateRequestDto();
+        CategoryDto expected = getPolishLiteratureDto();
 
         String jsonRequest = objectMapper.writeValueAsString(categoryCreateRequestDto);
 
         MvcResult mvcResult = mockMvc.perform(
-                        put("/categories/2")
+                        put("/categories/" + categoryId)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -196,11 +188,25 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void delete() throws Exception {
+        Long categoryId = 2L;
+
         MvcResult mvcResult = mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/categories/2")
+                        MockMvcRequestBuilders.delete("/categories/" + categoryId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andReturn();
+    }
+
+    private CategoryDto getPolishLiteratureDto() {
+        return new CategoryDto()
+                .setName("Polish Literature")
+                .setDescription("Polish Literature");
+    }
+
+    private CategoryCreateRequestDto getPolishLiteratureCreateRequestDto() {
+        return new CategoryCreateRequestDto()
+                .setName("Polish Literature")
+                .setDescription("Polish Literature");
     }
 }

@@ -7,6 +7,8 @@ import app.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,11 +44,13 @@ public class ShoppingCartController {
     @Operation(summary = "adding book",
             description = "adding book by creating new item cart"
                     + "and attaching it to shopping cart connected to the user")
-    public ShoppingCartDto add(@RequestBody CartItemCreateRequestDto cartItemCreateRequestDto) {
+    public ResponseEntity<ShoppingCartDto> add(
+            @RequestBody CartItemCreateRequestDto cartItemCreateRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return shoppingCartService.addOrUpdateItemCart(
+        ShoppingCartDto shoppingCartDto = shoppingCartService.addOrUpdateItemCart(
                 cartItemCreateRequestDto,
                 userService.findByEmail(authentication.getName()).getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

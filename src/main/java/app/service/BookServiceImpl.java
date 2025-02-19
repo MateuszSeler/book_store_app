@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public BookDtoWithoutCategoriesIds findById(@NonNull Long id) {
+    public BookDtoWithoutCategoriesIds getById(@NonNull Long id) {
         return bookMapper.toDtoWithoutCategoriesIds(
                 bookRepository.findById(id).orElseThrow(
                         () -> new EntityNotFoundException("Book with id: " + id + " not found")
