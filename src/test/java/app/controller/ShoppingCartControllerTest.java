@@ -28,6 +28,14 @@ import org.springframework.web.context.WebApplicationContext;
 @Sql(scripts = {"classpath:sqlqueries/insert-jan-into-users.sql",
         "classpath:sqlqueries/make-jan-user.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = {"classpath:sqlqueries/insert-cart_item_with_dziady-into-cart_items.sql",
+        "classpath:sqlqueries/insert-dziady-into-books.sql",
+        "classpath:sqlqueries/insert-jans_shopping_cart-into-shopping_carts.sql"},
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"classpath:sqlqueries/clear-books.sql",
+        "classpath:sqlqueries/clear-shopping_carts.sql",
+        "classpath:sqlqueries/clear-cart_items.sql"},
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class ShoppingCartControllerTest {
     protected static MockMvc mockMvc;
 
@@ -59,12 +67,6 @@ class ShoppingCartControllerTest {
     }
 
     @Test
-    @Sql(scripts = "classpath:sqlqueries/insert-dziady-into-books.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:sqlqueries/clear-books.sql",
-            "classpath:sqlqueries/clear-shopping_carts.sql",
-            "classpath:sqlqueries/clear-cart_items.sql"},
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void add() throws Exception {
         CartItemCreateRequestDto cartItemCreateRequestDto = getCartItemCreateRequestDto();
 
@@ -90,14 +92,6 @@ class ShoppingCartControllerTest {
     }
 
     @Test
-    @Sql(scripts = {"classpath:sqlqueries/insert-cart_item_with_dziady-into-cart_items.sql",
-            "classpath:sqlqueries/insert-dziady-into-books.sql",
-            "classpath:sqlqueries/insert-jans_shopping_cart-into-shopping_carts.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:sqlqueries/clear-books.sql",
-            "classpath:sqlqueries/clear-shopping_carts.sql",
-            "classpath:sqlqueries/clear-cart_items.sql"},
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void delete_byExistingId_success() throws Exception {
         Long cartItemId = 1L;
 

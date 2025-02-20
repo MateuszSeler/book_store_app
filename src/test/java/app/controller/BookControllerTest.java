@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,11 +31,21 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"classpath:sqlqueries/insert-dziady-into-books.sql",
+        "classpath:sqlqueries/insert-lalka-into-books.sql",
+        "classpath:sqlqueries/insert-solaris-into-books.sql",
+        "classpath:sqlqueries/insert-wesele-into-books.sql"},
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:sqlqueries/clear-books.sql",
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class BookControllerTest {
     protected static MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeAll
     static void beforeAll(@Autowired WebApplicationContext applicationContext) {
@@ -46,10 +57,6 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = "classpath:sqlqueries/insert-dziady-into-books.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findById_byExistingId_success() throws Exception {
         Long bookId = 1L;
         BookDto expected = getDziadyDto();
@@ -70,11 +77,6 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = {"classpath:sqlqueries/insert-dziady-into-books.sql",
-            "classpath:sqlqueries/insert-lalka-into-books.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getAllBooks_Success() throws Exception {
         MvcResult mvcResult = mockMvc.perform(
                         get("/books")
@@ -90,18 +92,11 @@ class BookControllerTest {
 
         Assertions.assertNotNull(actual);
         assertFalse(actual.isEmpty());
-        assertTrue(actual.size() == 2);
+        assertTrue(actual.size() == 4);
     }
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = {"classpath:sqlqueries/insert-dziady-into-books.sql",
-            "classpath:sqlqueries/insert-lalka-into-books.sql",
-            "classpath:sqlqueries/insert-solaris-into-books.sql",
-            "classpath:sqlqueries/insert-wesele-into-books.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void search_byPrice_gettingLalka() throws Exception {
         BigDecimal price = BigDecimal.valueOf(55);
 
@@ -125,13 +120,6 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = {"classpath:sqlqueries/insert-dziady-into-books.sql",
-            "classpath:sqlqueries/insert-lalka-into-books.sql",
-            "classpath:sqlqueries/insert-solaris-into-books.sql",
-            "classpath:sqlqueries/insert-wesele-into-books.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void search_byIsbn_gettingSolaris() throws Exception {
         String isbn = "9788838929106";
 
@@ -155,13 +143,6 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = {"classpath:sqlqueries/insert-dziady-into-books.sql",
-            "classpath:sqlqueries/insert-lalka-into-books.sql",
-            "classpath:sqlqueries/insert-solaris-into-books.sql",
-            "classpath:sqlqueries/insert-wesele-into-books.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void search_byTitle_gettingDziady() throws Exception {
         String title = "Dziady";
 
@@ -185,10 +166,8 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createProduct_validRequestDto_success() throws Exception {
-        BookCreateRequestDto bookCreateRequestDto = getLalkaCreateRequestDto();
+        BookCreateRequestDto bookCreateRequestDto = getParadiseCreateRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(bookCreateRequestDto);
 
@@ -203,7 +182,7 @@ class BookControllerTest {
         BookDto actual = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(), BookDto.class);
 
-        BookDto expected = getLalkaDto();
+        BookDto expected = getParadiseDto();
 
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.getId());
@@ -212,18 +191,15 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    @Sql(scripts = "classpath:sqlqueries/insert-dziady-into-books.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_validRequestDto_success() throws Exception {
-        BookCreateRequestDto bookCreateRequestDto = getLalkaCreateRequestDto();
-        BookDto expected = getLalkaDto();
+        Long bookId = 1L;
+        BookCreateRequestDto bookCreateRequestDto = getParadiseCreateRequestDto();
+        BookDto expected = getParadiseDto();
 
         String jsonRequest = objectMapper.writeValueAsString(bookCreateRequestDto);
 
         MvcResult mvcResult = mockMvc.perform(
-                        put("/books/1")
+                        put("/books/" + bookId)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -240,10 +216,6 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    @Sql(scripts = "classpath:sqlqueries/insert-dziady-into-books.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-books.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void delete_byExistingId_success() throws Exception {
         Long bookId = 1L;
         MvcResult mvcResult = mockMvc.perform(
@@ -265,24 +237,24 @@ class BookControllerTest {
                 .setCoverImage("dziadycover.ai");
     }
 
-    private BookDto getLalkaDto() {
+    private BookDto getParadiseDto() {
         return new BookDto()
                 .setId(1L)
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
+                .setTitle("Paradise")
+                .setAuthor("Abdulrazak Gurnah")
+                .setIsbn("9780241001837")
+                .setPrice(BigDecimal.valueOf(74))
+                .setDescription("Paradise")
+                .setCoverImage("paradise.ai");
     }
 
-    private BookCreateRequestDto getLalkaCreateRequestDto() {
+    private BookCreateRequestDto getParadiseCreateRequestDto() {
         return new BookCreateRequestDto()
-                .setTitle("Lalka")
-                .setAuthor("Boleslaw Prus")
-                .setIsbn("9781858660653")
-                .setPrice(BigDecimal.valueOf(55))
-                .setDescription("Lalka")
-                .setCoverImage("lalkacover.ai");
+                .setTitle("Paradise")
+                .setAuthor("Abdulrazak Gurnah")
+                .setIsbn("9780241001837")
+                .setPrice(BigDecimal.valueOf(74))
+                .setDescription("Paradise")
+                .setCoverImage("paradise.ai");
     }
 }

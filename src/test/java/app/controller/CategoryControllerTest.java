@@ -30,6 +30,17 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"classpath:sqlqueries/insert-polish_literature-into-categories.sql",
+        "classpath:sqlqueries/insert-foreign_literature-into-categories.sql",
+        "classpath:sqlqueries/insert-dziady-into-books.sql",
+        "classpath:sqlqueries/insert-lalka-into-books.sql",
+        "classpath:sqlqueries/insert-solaris-into-books.sql",
+        "classpath:sqlqueries/insert-books_categories-into-books_categories.sql"},
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"classpath:sqlqueries/clear-books.sql",
+        "classpath:sqlqueries/clear-categories.sql",
+        "classpath:sqlqueries/clear-books_categories.sql"},
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class CategoryControllerTest {
     protected static MockMvc mockMvc;
 
@@ -46,13 +57,9 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = "classpath:sqlqueries/insert-polish_literature-into-categories.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getById_byExistingId_success() throws Exception {
         Long categoryId = 1L;
-        CategoryDto expected = getPolishLiteratureDto();
+        CategoryDto expected = getPoetryDto();
 
         MvcResult mvcResult = mockMvc.perform(
                         get("/categories/" + categoryId)
@@ -70,11 +77,6 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = {"classpath:sqlqueries/insert-polish_literature-into-categories.sql",
-            "classpath:sqlqueries/insert-foreign_literature-into-categories.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getAll_success() throws Exception {
         MvcResult mvcResult = mockMvc.perform(
                         get("/categories")
@@ -95,17 +97,6 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    @Sql(scripts = {"classpath:sqlqueries/insert-polish_literature-into-categories.sql",
-            "classpath:sqlqueries/insert-foreign_literature-into-categories.sql",
-            "classpath:sqlqueries/insert-dziady-into-books.sql",
-            "classpath:sqlqueries/insert-lalka-into-books.sql",
-            "classpath:sqlqueries/insert-solaris-into-books.sql",
-            "classpath:sqlqueries/insert-books_categories-into-books_categories.sql"},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:sqlqueries/clear-books.sql",
-            "classpath:sqlqueries/clear-categories.sql",
-            "classpath:sqlqueries/clear-books_categories.sql"},
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByCategoryId_byExistingId_gettingLalka() throws Exception {
         Long categoryId = 1L;
         MvcResult mvcResult = mockMvc.perform(
@@ -127,10 +118,8 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void create_validRequestDto_success() throws Exception {
-        CategoryCreateRequestDto categoryCreateRequestDto = getPolishLiteratureCreateRequestDto();
+        CategoryCreateRequestDto categoryCreateRequestDto = getPoetryCreateRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(categoryCreateRequestDto);
 
@@ -145,7 +134,7 @@ class CategoryControllerTest {
         CategoryDto actual = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(), CategoryDto.class);
 
-        CategoryDto expected = getPolishLiteratureDto();
+        CategoryDto expected = getPoetryDto();
 
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.getId());
@@ -154,14 +143,10 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    @Sql(scripts = "classpath:sqlqueries/insert-foreign_literature-into-categories.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_validRequestDto_success() throws Exception {
         Long categoryId = 2L;
-        CategoryCreateRequestDto categoryCreateRequestDto = getPolishLiteratureCreateRequestDto();
-        CategoryDto expected = getPolishLiteratureDto();
+        CategoryCreateRequestDto categoryCreateRequestDto = getPoetryCreateRequestDto();
+        CategoryDto expected = getPoetryDto();
 
         String jsonRequest = objectMapper.writeValueAsString(categoryCreateRequestDto);
 
@@ -183,10 +168,6 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    @Sql(scripts = "classpath:sqlqueries/insert-foreign_literature-into-categories.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:sqlqueries/clear-categories.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void delete() throws Exception {
         Long categoryId = 2L;
 
@@ -198,15 +179,15 @@ class CategoryControllerTest {
                 .andReturn();
     }
 
-    private CategoryDto getPolishLiteratureDto() {
+    private CategoryDto getPoetryDto() {
         return new CategoryDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
+                .setName("Poetry")
+                .setDescription("Poetry");
     }
 
-    private CategoryCreateRequestDto getPolishLiteratureCreateRequestDto() {
+    private CategoryCreateRequestDto getPoetryCreateRequestDto() {
         return new CategoryCreateRequestDto()
-                .setName("Polish Literature")
-                .setDescription("Polish Literature");
+                .setName("Poetry")
+                .setDescription("Poetry");
     }
 }
