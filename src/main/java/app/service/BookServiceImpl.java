@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public BookDtoWithoutCategoriesIds findById(@NonNull Long id) {
+    public BookDtoWithoutCategoriesIds getById(@NonNull Long id) {
         return bookMapper.toDtoWithoutCategoriesIds(
                 bookRepository.findById(id).orElseThrow(
                         () -> new EntityNotFoundException("Book with id: " + id + " not found")
@@ -86,10 +86,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void update(@NonNull Long id, @Valid BookCreateRequestDto bookCreateRequestDto) {
-        Book book = toEntity(bookCreateRequestDto);;
-        book.setId(id);
-        bookRepository.save(book);
+    public BookDto update(@NonNull Long id, @Valid BookCreateRequestDto bookCreateRequestDto) {
+        Book book = bookRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Book with id: " + id + " not found")
+        );
+
+        Book bookForUpdate = toEntity(bookCreateRequestDto);
+
+        book.setTitle(bookForUpdate.getTitle())
+                .setAuthor(bookForUpdate.getAuthor())
+                .setIsbn(bookForUpdate.getIsbn())
+                .setPrice(bookForUpdate.getPrice())
+                .setDescription(bookForUpdate.getDescription())
+                .setCoverImage(bookForUpdate.getCoverImage())
+                .setCategories(bookForUpdate.getCategories());
+
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override

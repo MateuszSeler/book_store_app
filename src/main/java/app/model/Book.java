@@ -14,11 +14,13 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Data
+@Accessors(chain = true)
 @SQLDelete(sql = "UPDATE books SET is_Deleted = true WHERE id = ?")
 @SQLRestriction(value = "is_Deleted = false")
 @Table(name = "books")

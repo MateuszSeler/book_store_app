@@ -1,0 +1,2 @@
+TRUNCATE TABLE categories;
+ALTER TABLE categories AUTO_INCREMENT = 1;

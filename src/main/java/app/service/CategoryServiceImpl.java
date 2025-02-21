@@ -1,5 +1,6 @@
 package app.service;
 
+import app.dto.category.CategoryCreateRequestDto;
 import app.dto.category.CategoryDto;
 import app.exception.EntityNotFoundException;
 import app.mapper.CategoryMapper;
@@ -39,20 +40,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto save(CategoryDto categoryDto) {
+    public CategoryDto save(CategoryCreateRequestDto categoryCreateRequestDto) {
         return categoryMapper.toDto(
                 categoryRepository.save(
-                        categoryMapper.toModel(categoryDto)));
+                        categoryMapper.toModel(categoryCreateRequestDto)));
     }
 
     @Override
     @Transactional
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CategoryCreateRequestDto categoryCreateRequestDto) {
         if (categoryRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Category with id: " + id + " not found");
         }
 
-        Category categoryForUpdate = categoryMapper.toModel(categoryDto);
+        Category categoryForUpdate = categoryMapper.toModel(categoryCreateRequestDto);
         categoryForUpdate.setId(id);
         return categoryMapper.toDto(categoryRepository.save(categoryForUpdate));
     }
